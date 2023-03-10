@@ -6,57 +6,57 @@ import (
 	"net/http"
 )
 
-func DeleteAlbum(resp http.ResponseWriter, req *http.Request) {
-	id := pathVariable(req, "id")
+func DeleteAlbum(respWriter http.ResponseWriter, request *http.Request) {
+	var resp, req = convert(respWriter, request)
+	var id = req.PathVariable("id")
 	var album model.Album
 	datasource.Connection().First(&album, id)
 	if album.ID == 0 {
-		respondJson(resp, "album not found!")
+		resp.RespondJson("album not found!")
 		return
 	}
 	datasource.Connection().Delete(&album, id)
-	setContentTypeJson(resp)
-	respondJson(resp, "album deleted successfully")
+	resp.RespondJson("album deleted successfully")
 }
 
-func UpdateAlbum(resp http.ResponseWriter, req *http.Request) {
-	id := pathVariable(req, "id")
+func UpdateAlbum(respWriter http.ResponseWriter, request *http.Request) {
+	var resp, req = convert(respWriter, request)
+	var id = req.PathVariable("id")
 	var album model.Album
 	datasource.Connection().First(&album, id)
 	if album.ID == 0 {
-		respondJson(resp, "album not found!")
+		resp.RespondJson("album not found!")
 		return
 	}
-	requestBody(req, &album)
+	req.RequestBodyFromJson(&album)
 	datasource.Connection().Save(&album)
-	setContentTypeJson(resp)
-	respondJson(resp, album)
+	resp.RespondJson(album)
 }
 
-func GetAlbums(resp http.ResponseWriter, req *http.Request) {
+func GetAlbums(respWriter http.ResponseWriter, request *http.Request) {
+	var resp, _ = convert(respWriter, request)
 	var albums []*model.Album
 	datasource.Connection().Find(&albums)
-	setContentTypeJson(resp)
 	resp.WriteHeader(http.StatusOK)
-	respondJson(resp, albums)
+	resp.RespondJson(albums)
 }
 
-func GetAlbum(resp http.ResponseWriter, req *http.Request) {
-	id := pathVariable(req, "id")
+func GetAlbum(respWriter http.ResponseWriter, request *http.Request) {
+	var resp, req = convert(respWriter, request)
+	var id = req.PathVariable("id")
+
 	var album model.Album
 	datasource.Connection().First(&album, id)
 	if album.ID == 0 {
-		respondJson(resp, "album not found!")
+		resp.RespondJson("album not found!")
 		return
 	}
-	setContentTypeJson(resp)
-	respondJson(resp, album)
+	resp.RespondJson(album)
 }
 
-func PostAlbum(resp http.ResponseWriter, req *http.Request) {
-	setContentTypeJson(resp)
-	var album model.Album
-	requestBody(req, &album)
+func PostAlbum(respWriter http.ResponseWriter, request *http.Request) {
+	var resp, req = convert(respWriter, request)
+	var album = req.GetRequestBodyFromJson()
 	datasource.Connection().Create(&album)
-	respondJson(resp, album)
+	resp.RespondJson(album)
 }
