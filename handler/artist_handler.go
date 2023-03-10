@@ -3,62 +3,60 @@ package handler
 import (
 	"CRUD/datasource"
 	"CRUD/model"
-	"encoding/json"
-	"github.com/gorilla/mux"
 	"net/http"
 )
 
 func DeleteArtist(resp http.ResponseWriter, req *http.Request) {
+	id := pathVariable(req, "id")
 	var artist model.Artist
-	id := mux.Vars(req)["id"]
 	datasource.Connection().First(&artist, id)
 	if artist.ID == 0 {
-		json.NewEncoder(resp).Encode("artist not found!")
+		respondJson(resp, "artist not found!")
 		return
 	}
 	datasource.Connection().Delete(&artist, id)
-	resp.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(resp).Encode("artist deleted successfully")
+	setContentTypeJson(resp)
+	respondJson(resp, "artist deleted successfully")
 }
 
 func UpdateArtist(resp http.ResponseWriter, req *http.Request) {
+	id := pathVariable(req, "id")
 	var artist model.Artist
-	id := mux.Vars(req)["id"]
 	datasource.Connection().First(&artist, id)
 	if artist.ID == 0 {
-		json.NewEncoder(resp).Encode("artist not found!")
+		respondJson(resp, "artist not found!")
 		return
 	}
-	json.NewDecoder(req.Body).Decode(&artist)
+	requestBody(req, &artist)
 	datasource.Connection().Save(&artist)
-	resp.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(resp).Encode(artist)
+	setContentTypeJson(resp)
+	respondJson(resp, artist)
 }
 
 func GetArtists(resp http.ResponseWriter, req *http.Request) {
 	var artists []*model.Artist
 	datasource.Connection().Find(&artists)
-	resp.Header().Set("Content-Type", "application/json")
+	setContentTypeJson(resp)
 	resp.WriteHeader(http.StatusOK)
-	json.NewEncoder(resp).Encode(artists)
+	respondJson(resp, artists)
 }
 
 func GetArtist(resp http.ResponseWriter, req *http.Request) {
+	id := pathVariable(req, "id")
 	var artist model.Artist
-	id := mux.Vars(req)["id"]
 	datasource.Connection().First(&artist, id)
 	if artist.ID == 0 {
-		json.NewEncoder(resp).Encode("artist not found!")
+		respondJson(resp, "artist not found!")
 		return
 	}
-	resp.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(resp).Encode(artist)
+	setContentTypeJson(resp)
+	respondJson(resp, artist)
 }
 
 func PostArtist(resp http.ResponseWriter, req *http.Request) {
-	resp.Header().Set("Content-Type", "application/json")
+	setContentTypeJson(resp)
 	var artist model.Artist
-	json.NewDecoder(req.Body).Decode(&artist)
+	requestBody(req, &artist)
 	datasource.Connection().Create(&artist)
-	json.NewEncoder(resp).Encode(artist)
+	respondJson(resp, artist)
 }
