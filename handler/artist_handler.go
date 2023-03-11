@@ -3,39 +3,36 @@ package handler
 import (
 	"CRUD/datasource"
 	"CRUD/model"
+	"CRUD/router"
 	"net/http"
 )
 
-func GetArtist(respWriter http.ResponseWriter, request *http.Request) {
-	var resp, req = Convert(respWriter, request)
-	var id = req.PathVariable("id")
+func GetArtist(resonse router.Response, request router.Request) {
+	var id = request.PathVariable("id")
 	var artist model.Artist
 	datasource.Connection().First(&artist, id)
 	if artist.ID == 0 {
-		resp.ResponseCode(http.StatusNotFound)
+		resonse.ResponseCode(http.StatusNotFound)
 		return
 	}
-	resp.RespondHtmlView("template/artist.html", artist)
+	resonse.RespondHtmlView("template/artist.html", artist)
 }
 
-func HandleCreateArtistView(respWriter http.ResponseWriter, request *http.Request) {
-	var resp, _ = Convert(respWriter, request)
-	resp.RespondHtmlView("template/create_artist.html", nil)
+func HandleCreateArtistView(resonse router.Response, request router.Request) {
+	resonse.RespondHtmlView("template/create_artist.html", nil)
 }
 
-func CreateArtist(respWriter http.ResponseWriter, request *http.Request) {
-	var resp, req = Convert(respWriter, request)
-
-	if req.FormValue("name") == "" {
-		resp.RespondHtmlView("template/create_artist.html", struct{ Success bool }{false})
+func CreateArtist(resonse router.Response, request router.Request) {
+	if request.FormValue("name") == "" {
+		resonse.RespondHtmlView("template/create_artist.html", struct{ Success bool }{false})
 		return
 	}
 
 	var artist = model.Artist{
-		Name: req.FormValue("name"),
+		Name: request.FormValue("name"),
 		// Description: req.FormValue("description"),
 	}
 
 	datasource.Connection().Save(&artist)
-	resp.RespondHtmlView("template/create_artist.html", struct{ Success bool }{true})
+	resonse.RespondHtmlView("template/create_artist.html", struct{ Success bool }{true})
 }

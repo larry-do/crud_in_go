@@ -23,7 +23,7 @@ func initializeRoutes() {
 		Router: mux.NewRouter(),
 	}
 
-	appRouter.HandleGetRequest("/", func(writer http.ResponseWriter, request *http.Request) {
+	appRouter.HandleGetRequest("/", func(resonse router.Response, request router.Request) {
 		// do nothing
 	})
 

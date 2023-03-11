@@ -2,62 +2,57 @@ package api
 
 import (
 	"CRUD/datasource"
-	"CRUD/handler"
 	"CRUD/model"
+	"CRUD/router"
 	"net/http"
 )
 
-func DeleteAlbum(respWriter http.ResponseWriter, request *http.Request) {
-	var resp, req = handler.Convert(respWriter, request)
-	var id = req.PathVariable("id")
+func DeleteAlbum(resonse router.Response, request router.Request) {
+	var id = request.PathVariable("id")
 	var album model.Album
 	datasource.Connection().First(&album, id)
 	if album.ID == 0 {
-		resp.RespondJson("album not found!")
+		resonse.RespondJson("album not found!")
 		return
 	}
 	datasource.Connection().Delete(&album, id)
-	resp.RespondJson("album deleted successfully")
+	resonse.RespondJson("album deleted successfully")
 }
 
-func UpdateAlbum(respWriter http.ResponseWriter, request *http.Request) {
-	var resp, req = handler.Convert(respWriter, request)
-	var id = req.PathVariable("id")
+func UpdateAlbum(resonse router.Response, request router.Request) {
+	var id = request.PathVariable("id")
 	var album model.Album
 	datasource.Connection().First(&album, id)
 	if album.ID == 0 {
-		resp.RespondJson("album not found!")
+		resonse.RespondJson("album not found!")
 		return
 	}
-	req.RequestBodyFromJson(&album)
+	request.RequestBodyFromJson(&album)
 	datasource.Connection().Save(&album)
-	resp.RespondJson(album)
+	resonse.RespondJson(album)
 }
 
-func GetAlbums(respWriter http.ResponseWriter, request *http.Request) {
-	var resp, _ = handler.Convert(respWriter, request)
+func GetAlbums(resonse router.Response, request router.Request) {
 	var albums []*model.Album
 	datasource.Connection().Find(&albums)
-	resp.WriteHeader(http.StatusOK)
-	resp.RespondJson(albums)
+	resonse.WriteHeader(http.StatusOK)
+	resonse.RespondJson(albums)
 }
 
-func GetAlbum(respWriter http.ResponseWriter, request *http.Request) {
-	var resp, req = handler.Convert(respWriter, request)
-	var id = req.PathVariable("id")
+func GetAlbum(resonse router.Response, request router.Request) {
+	var id = request.PathVariable("id")
 
 	var album model.Album
 	datasource.Connection().First(&album, id)
 	if album.ID == 0 {
-		resp.RespondJson("album not found!")
+		resonse.RespondJson("album not found!")
 		return
 	}
-	resp.RespondJson(album)
+	resonse.RespondJson(album)
 }
 
-func PostAlbum(respWriter http.ResponseWriter, request *http.Request) {
-	var resp, req = handler.Convert(respWriter, request)
-	var album = req.GetRequestBodyFromJson()
+func PostAlbum(resonse router.Response, request router.Request) {
+	var album = request.GetRequestBodyFromJson()
 	datasource.Connection().Create(&album)
-	resp.RespondJson(album)
+	resonse.RespondJson(album)
 }

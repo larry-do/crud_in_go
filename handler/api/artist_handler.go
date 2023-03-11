@@ -4,60 +4,61 @@ import (
 	"CRUD/datasource"
 	"CRUD/handler"
 	"CRUD/model"
+	"CRUD/router"
 	"net/http"
 )
 
-func DeleteArtist(resp http.ResponseWriter, req *http.Request) {
-	id := handler.PathVariable(req, "id")
+func DeleteArtist(resonse router.Response, request router.Request) {
+	id := handler.PathVariable(request.Request, "id")
 	var artist model.Artist
 	datasource.Connection().First(&artist, id)
 	if artist.ID == 0 {
-		handler.RespondJson(resp, "artist not found!")
+		handler.RespondJson(resonse, "artist not found!")
 		return
 	}
 	datasource.Connection().Delete(&artist, id)
-	handler.SetContentTypeJson(resp)
-	handler.RespondJson(resp, "artist deleted successfully")
+	handler.SetContentTypeJson(resonse)
+	handler.RespondJson(resonse, "artist deleted successfully")
 }
 
-func UpdateArtist(resp http.ResponseWriter, req *http.Request) {
-	id := handler.PathVariable(req, "id")
+func UpdateArtist(resonse router.Response, request router.Request) {
+	id := handler.PathVariable(request.Request, "id")
 	var artist model.Artist
 	datasource.Connection().First(&artist, id)
 	if artist.ID == 0 {
-		handler.RespondJson(resp, "artist not found!")
+		handler.RespondJson(resonse, "artist not found!")
 		return
 	}
-	handler.RequestBody(req, &artist)
+	handler.RequestBody(request.Request, &artist)
 	datasource.Connection().Save(&artist)
-	handler.SetContentTypeJson(resp)
-	handler.RespondJson(resp, artist)
+	handler.SetContentTypeJson(resonse)
+	handler.RespondJson(resonse, artist)
 }
 
-func GetArtists(resp http.ResponseWriter, req *http.Request) {
+func GetArtists(resonse router.Response, request router.Request) {
 	var artists []*model.Artist
 	datasource.Connection().Find(&artists)
-	handler.SetContentTypeJson(resp)
-	resp.WriteHeader(http.StatusOK)
-	handler.RespondJson(resp, artists)
+	handler.SetContentTypeJson(resonse)
+	resonse.WriteHeader(http.StatusOK)
+	handler.RespondJson(resonse, artists)
 }
 
-func GetArtist(resp http.ResponseWriter, req *http.Request) {
-	id := handler.PathVariable(req, "id")
+func GetArtist(resonse router.Response, request router.Request) {
+	id := handler.PathVariable(request.Request, "id")
 	var artist model.Artist
 	datasource.Connection().First(&artist, id)
 	if artist.ID == 0 {
-		handler.RespondJson(resp, "artist not found!")
+		handler.RespondJson(resonse, "artist not found!")
 		return
 	}
-	handler.SetContentTypeJson(resp)
-	handler.RespondJson(resp, artist)
+	handler.SetContentTypeJson(resonse)
+	handler.RespondJson(resonse, artist)
 }
 
-func PostArtist(resp http.ResponseWriter, req *http.Request) {
-	handler.SetContentTypeJson(resp)
+func PostArtist(resonse router.Response, request router.Request) {
+	handler.SetContentTypeJson(resonse)
 	var artist model.Artist
-	handler.RequestBody(req, &artist)
+	handler.RequestBody(request.Request, &artist)
 	datasource.Connection().Create(&artist)
-	handler.RespondJson(resp, artist)
+	handler.RespondJson(resonse, artist)
 }
