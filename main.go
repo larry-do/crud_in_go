@@ -39,6 +39,10 @@ func initializeRoutes() {
 	appRouter.HandlePutRequest("/api/v1/artist/{id}", api.UpdateArtist)
 	appRouter.HandleDeleteRequest("/api/v1/artist/{id}", api.DeleteArtist)
 
+	appRouter.HandleGetRequest("/artist/create", handler.HandleCreateArtistView)
+
+	appRouter.HandlePostRequest("/artist/create", handler.CreateArtist)
+
 	appRouter.HandleGetRequest("/artist/{id}", handler.GetArtist)
 
 	log.Println("Listening and serving on http://localhost:5000")

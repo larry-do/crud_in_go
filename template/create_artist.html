@@ -1,0 +1,12 @@
+{{if .Success}}
+    <h1>Thanks for your submission!</h1>
+{{else}}
+    <h1>Contact</h1>
+    <form action="/artist/create" method="POST">
+        <label>Name:</label><br/>
+        <input type="text" name="name"><br/>
+        <label>Description:</label><br/>
+        <textarea name="description"></textarea><br/>
+        <input type="submit">
+    </form>
+{{end}}
