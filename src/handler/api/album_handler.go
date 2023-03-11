@@ -1,9 +1,9 @@
 package api
 
 import (
-	"CRUD/datasource"
-	"CRUD/model"
-	"CRUD/router"
+	"CRUD/src/datasource"
+	"CRUD/src/model"
+	"CRUD/src/router"
 	"net/http"
 )
 

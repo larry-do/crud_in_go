@@ -1,10 +1,10 @@
 package api
 
 import (
-	"CRUD/datasource"
-	"CRUD/handler"
-	"CRUD/model"
-	"CRUD/router"
+	"CRUD/src/datasource"
+	"CRUD/src/handler"
+	"CRUD/src/model"
+	"CRUD/src/router"
 	"net/http"
 )
 

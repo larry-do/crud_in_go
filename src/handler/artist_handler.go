@@ -1,9 +1,9 @@
 package handler
 
 import (
-	"CRUD/datasource"
-	"CRUD/model"
-	"CRUD/router"
+	"CRUD/src/datasource"
+	"CRUD/src/model"
+	"CRUD/src/router"
 	"net/http"
 )
 
@@ -15,16 +15,16 @@ func GetArtist(resonse router.Response, request router.Request) {
 		resonse.ResponseCode(http.StatusNotFound)
 		return
 	}
-	resonse.RespondHtmlView("template/artist.html", artist)
+	resonse.RespondHtmlView("resources/template/artist.html", artist)
 }
 
 func HandleCreateArtistView(resonse router.Response, request router.Request) {
-	resonse.RespondHtmlView("template/create_artist.html", nil)
+	resonse.RespondHtmlView("resources/template/create_artist.html", nil)
 }
 
 func CreateArtist(resonse router.Response, request router.Request) {
 	if request.FormValue("name") == "" {
-		resonse.RespondHtmlView("template/create_artist.html", struct{ Success bool }{false})
+		resonse.RespondHtmlView("resources/template/create_artist.html", struct{ Success bool }{false})
 		return
 	}
 
@@ -34,5 +34,5 @@ func CreateArtist(resonse router.Response, request router.Request) {
 	}
 
 	datasource.Connection().Save(&artist)
-	resonse.RespondHtmlView("template/create_artist.html", struct{ Success bool }{true})
+	resonse.RespondHtmlView("resources/template/create_artist.html", struct{ Success bool }{true})
 }

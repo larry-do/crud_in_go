@@ -1,10 +1,10 @@
 package main
 
 import (
-	"CRUD/datasource"
-	"CRUD/handler"
-	"CRUD/handler/api"
-	"CRUD/router"
+	"CRUD/src/datasource"
+	"CRUD/src/handler"
+	"CRUD/src/handler/api"
+	"CRUD/src/router"
 	"github.com/gorilla/mux"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"log"
@@ -44,6 +44,9 @@ func initializeRoutes() {
 	appRouter.HandlePostRequest("/artist/create", handler.CreateArtist)
 
 	appRouter.HandleGetRequest("/artist/{id}", handler.GetArtist)
+
+	var fileServer = http.FileServer(http.Dir("resources/assets"))
+	appRouter.PathPrefix("/static/").Handler(http.StripPrefix("/static/", fileServer))
 
 	log.Println("Listening and serving on http://localhost:5000")
 	log.Fatal(http.ListenAndServe(":5000", appRouter.Router))

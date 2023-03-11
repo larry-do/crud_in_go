@@ -1,8 +1,8 @@
 package datasource
 
 import (
-	"CRUD/configuration"
-	"CRUD/model"
+	"CRUD/src/configuration"
+	"CRUD/src/model"
 	"fmt"
 	"github.com/jinzhu/gorm"
 	"github.com/joho/godotenv"
@@ -17,7 +17,7 @@ var (
 )
 
 func Initialize() {
-	var datasource, dialect, autoMigrate = loadDatasource("application.properties")
+	var datasource, dialect, autoMigrate = loadDatasource("resources/application.properties")
 
 	db, err = gorm.Open(dialect, fmt.Sprintf("host=%s port=%d dbname=%s user=%s password=%s sslmode=disable",
 		datasource.Host, datasource.Port, datasource.Dbname,
