@@ -8,7 +8,7 @@ import (
 
 func GetArtist(respWriter http.ResponseWriter, request *http.Request) {
 	var resp, req = Convert(respWriter, request)
-	id := req.PathVariable("id")
+	var id = req.PathVariable("id")
 	var artist model.Artist
 	datasource.Connection().First(&artist, id)
 	if artist.ID == 0 {

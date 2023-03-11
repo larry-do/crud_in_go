@@ -16,7 +16,7 @@ func (req Request) RequestBodyFromJson(object any) any {
 
 func (req Request) GetRequestBodyFromJson() any {
 	var object any
-	err := json.NewDecoder(req.Body).Decode(&object)
+	var err = json.NewDecoder(req.Body).Decode(&object)
 	if err != nil {
 		return nil
 	}

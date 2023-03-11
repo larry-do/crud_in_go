@@ -5,7 +5,6 @@ import (
 	"CRUD/handler"
 	"CRUD/handler/api"
 	"CRUD/router"
-	"fmt"
 	"github.com/gorilla/mux"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"log"
@@ -15,6 +14,11 @@ import (
 func main() {
 	datasource.Initialize()
 
+	// keep this statement last
+	initializeRoutes()
+}
+
+func initializeRoutes() {
 	var appRouter = router.Router{
 		Router: mux.NewRouter(),
 	}
@@ -37,6 +41,6 @@ func main() {
 
 	appRouter.HandleGetRequest("/artist/{id}", handler.GetArtist)
 
-	fmt.Println("Listening and serving on http://localhost:5000")
+	log.Println("Listening and serving on http://localhost:5000")
 	log.Fatal(http.ListenAndServe(":5000", appRouter.Router))
 }
