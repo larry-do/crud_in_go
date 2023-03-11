@@ -1,13 +1,14 @@
-package handler
+package api
 
 import (
 	"CRUD/datasource"
+	"CRUD/handler"
 	"CRUD/model"
 	"net/http"
 )
 
 func DeleteAlbum(respWriter http.ResponseWriter, request *http.Request) {
-	var resp, req = convert(respWriter, request)
+	var resp, req = handler.Convert(respWriter, request)
 	var id = req.PathVariable("id")
 	var album model.Album
 	datasource.Connection().First(&album, id)
@@ -20,7 +21,7 @@ func DeleteAlbum(respWriter http.ResponseWriter, request *http.Request) {
 }
 
 func UpdateAlbum(respWriter http.ResponseWriter, request *http.Request) {
-	var resp, req = convert(respWriter, request)
+	var resp, req = handler.Convert(respWriter, request)
 	var id = req.PathVariable("id")
 	var album model.Album
 	datasource.Connection().First(&album, id)
@@ -34,7 +35,7 @@ func UpdateAlbum(respWriter http.ResponseWriter, request *http.Request) {
 }
 
 func GetAlbums(respWriter http.ResponseWriter, request *http.Request) {
-	var resp, _ = convert(respWriter, request)
+	var resp, _ = handler.Convert(respWriter, request)
 	var albums []*model.Album
 	datasource.Connection().Find(&albums)
 	resp.WriteHeader(http.StatusOK)
@@ -42,7 +43,7 @@ func GetAlbums(respWriter http.ResponseWriter, request *http.Request) {
 }
 
 func GetAlbum(respWriter http.ResponseWriter, request *http.Request) {
-	var resp, req = convert(respWriter, request)
+	var resp, req = handler.Convert(respWriter, request)
 	var id = req.PathVariable("id")
 
 	var album model.Album
@@ -55,7 +56,7 @@ func GetAlbum(respWriter http.ResponseWriter, request *http.Request) {
 }
 
 func PostAlbum(respWriter http.ResponseWriter, request *http.Request) {
-	var resp, req = convert(respWriter, request)
+	var resp, req = handler.Convert(respWriter, request)
 	var album = req.GetRequestBodyFromJson()
 	datasource.Connection().Create(&album)
 	resp.RespondJson(album)

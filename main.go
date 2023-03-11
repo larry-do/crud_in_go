@@ -3,6 +3,7 @@ package main
 import (
 	"CRUD/datasource"
 	"CRUD/handler"
+	"CRUD/handler/api"
 	"CRUD/router"
 	"fmt"
 	"github.com/gorilla/mux"
@@ -22,17 +23,19 @@ func main() {
 		// do nothing
 	})
 
-	appRouter.HandlePostRequest("/api/v1/album", handler.PostAlbum)
-	appRouter.HandleGetRequest("/api/v1/albums", handler.GetAlbums)
-	appRouter.HandleGetRequest("/api/v1/album/{id}", handler.GetAlbum)
-	appRouter.HandlePutRequest("/api/v1/album/{id}", handler.UpdateAlbum)
-	appRouter.HandleDeleteRequest("/api/v1/album/{id}", handler.DeleteAlbum)
+	appRouter.HandlePostRequest("/api/v1/album", api.PostAlbum)
+	appRouter.HandleGetRequest("/api/v1/albums", api.GetAlbums)
+	appRouter.HandleGetRequest("/api/v1/album/{id}", api.GetAlbum)
+	appRouter.HandlePutRequest("/api/v1/album/{id}", api.UpdateAlbum)
+	appRouter.HandleDeleteRequest("/api/v1/album/{id}", api.DeleteAlbum)
 
-	appRouter.HandlePostRequest("/api/v1/artist", handler.PostArtist)
-	appRouter.HandleGetRequest("/api/v1/artists", handler.GetArtists)
-	appRouter.HandleGetRequest("/api/v1/artist/{id}", handler.GetArtist)
-	appRouter.HandlePutRequest("/api/v1/artist/{id}", handler.UpdateArtist)
-	appRouter.HandleDeleteRequest("/api/v1/artist/{id}", handler.DeleteArtist)
+	appRouter.HandlePostRequest("/api/v1/artist", api.PostArtist)
+	appRouter.HandleGetRequest("/api/v1/artists", api.GetArtists)
+	appRouter.HandleGetRequest("/api/v1/artist/{id}", api.GetArtist)
+	appRouter.HandlePutRequest("/api/v1/artist/{id}", api.UpdateArtist)
+	appRouter.HandleDeleteRequest("/api/v1/artist/{id}", api.DeleteArtist)
+
+	appRouter.HandleGetRequest("/artist/{id}", handler.GetArtist)
 
 	fmt.Println("Listening and serving on http://localhost:5000")
 	log.Fatal(http.ListenAndServe(":5000", appRouter.Router))
