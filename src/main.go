@@ -1,7 +1,6 @@
 package main
 
 import (
-	"CRUD/src/datasource"
 	"CRUD/src/handler"
 	"CRUD/src/handler/api"
 	"CRUD/src/router"
@@ -12,7 +11,7 @@ import (
 )
 
 func main() {
-	datasource.Initialize()
+	/*datasource.Initialize()*/
 
 	// keep this statement last
 	initializeRoutes()
@@ -45,9 +44,17 @@ func initializeRoutes() {
 
 	appRouter.HandleGetRequest("/artist/{id}", handler.GetArtist)
 
+	appRouter.HandleGetRequest("/media-access", func(response router.Response, request router.Request) {
+		response.RespondHtmlView("resources/template/media-access.html", nil)
+	})
+
+	appRouter.HandleGetRequest("/barcode-reader", func(response router.Response, request router.Request) {
+		response.RespondHtmlView("resources/template/zxing-js.html", nil)
+	})
+
 	var fileServer = http.FileServer(http.Dir("resources/assets"))
 	appRouter.PathPrefix("/static/").Handler(http.StripPrefix("/static/", fileServer))
 
-	log.Println("Listening and serving on http://localhost:5000")
-	log.Fatal(http.ListenAndServe(":5000", appRouter.Router))
+	log.Println("Listening and serving on http://localhost:80")
+	log.Fatal(http.ListenAndServe(":80", appRouter.Router))
 }
